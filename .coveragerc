@@ -1,0 +1,6 @@
+[run]
+source = RSSFeed
+omit = 
+    tests/*
+    autoapp.py
+
