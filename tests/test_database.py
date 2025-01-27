@@ -1,11 +1,16 @@
-# -*- coding: utf-8 -*-
 """Database unit tests."""
+
+from collections.abc import Generator
+
 import pytest
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.session import Session
 from sqlalchemy import text
 from sqlalchemy.orm.exc import ObjectDeletedError
 
 from rss_feed.database import Column, PkModel, db
+from rss_feed.user.models import User
 
 
 class ExampleUserModel(UserMixin, PkModel):
@@ -15,7 +20,7 @@ class ExampleUserModel(UserMixin, PkModel):
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
 
-    def __init__(self, username, email):
+    def __init__(self, username: str, email: str) -> None:
         """Create instance."""
         super().__init__(username=username, email=email)
 
@@ -24,46 +29,55 @@ class ExampleUserModel(UserMixin, PkModel):
 class TestCRUDMixin:
     """CRUDMixin tests."""
 
-    def test_create(self):
+    def test_create(self) -> None:
         """Test CRUD create."""
-        user = ExampleUserModel.create(username="foo", email="foo@bar.com")
-        assert ExampleUserModel.get_by_id(user.id).username == "foo"
+        user: User = ExampleUserModel.create(username="foo", email="foo@bar.com")
+        user_db = ExampleUserModel.get_by_id(record_id=user.id)
+        assert user_db is not None
+        assert user_db.username == "foo"
 
-    def test_create_save(self):
+    def test_create_save(self) -> None:
         """Test CRUD create with save."""
-        user = ExampleUserModel("foo", "foo@bar.com")
+        user = ExampleUserModel(username="foo", email="foo@bar.com")
         user.save()
         assert ExampleUserModel.get_by_id(user.id) is not None
 
-    def test_delete_with_commit(self):
+    def test_delete_with_commit(self) -> None:
         """Test CRUD delete with commit."""
-        user = ExampleUserModel("foo", "foo@bar.com")
+        user = ExampleUserModel(username="foo", email="foo@bar.com")
         user.save()
         user.delete(commit=True)
         assert ExampleUserModel.get_by_id(user.id) is None
 
-    def test_delete_without_commit_cannot_access(self):
+    def test_delete_without_commit_cannot_access(self) -> None:
         """Test CRUD delete without commit."""
-        user = ExampleUserModel("foo", "foo@bar.com")
+        user = ExampleUserModel(username="foo", email="foo@bar.com")
         user.save()
         user.delete(commit=False)
         with pytest.raises(ObjectDeletedError):
             ExampleUserModel.get_by_id(user.id)
 
-    @pytest.mark.parametrize("commit,expected", [(True, "bar"), (False, "foo")])
-    def test_update(self, commit, expected, db):
+    @pytest.mark.parametrize(("commit", "expected"), [(True, "bar"), (False, "foo")])
+    def test_update(
+        self,
+        *,
+        commit: bool,
+        expected: str,
+        db: SQLAlchemy,
+    ) -> None:
         """Test CRUD update with and without commit."""
         user = ExampleUserModel(username="foo", email="foo@bar.com")
         user.save()
         user.update(commit=commit, username="bar")
         query = text("select * from testusers")
         retrieved = db.session.execute(query).fetchone()
+        assert retrieved is not None
         assert retrieved.username == expected
 
 
 class TestPkModel:
     """PkModel tests."""
 
-    def test_get_by_id_wrong_type(self):
+    def test_get_by_id_wrong_type(self) -> None:
         """Test get_by_id returns None for non-numeric argument."""
         assert ExampleUserModel.get_by_id("xyz") is None

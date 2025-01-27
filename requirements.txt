@@ -1,9 +1,0 @@
-# Included because many Paas's require a requirements.txt file in the project root
-# Just installs the production requirements.
--r requirements/prod.txt
-
-pytest~=8.3.4
-WebTest~=3.0.3
-factory_boy~=3.3.1
-marshmallow~=3.26.0
-alembic~=1.14.1

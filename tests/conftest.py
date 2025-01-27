@@ -1,9 +1,12 @@
-# -*- coding: utf-8 -*-
 """Defines fixtures available to all tests."""
 
 import logging
+from collections.abc import Generator
 
 import pytest
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.session import Session
 from webtest import TestApp
 
 from rss_feed.app import create_app
@@ -13,7 +16,7 @@ from .factories import UserFactory
 
 
 @pytest.fixture
-def app():
+def app() -> Generator[Flask]:
     """Create application for the tests."""
     _app = create_app("tests.settings")
     _app.logger.setLevel(logging.CRITICAL)
@@ -26,15 +29,15 @@ def app():
 
 
 @pytest.fixture
-def testapp(app):
+def testapp(app: Flask) -> TestApp:
     """Create Webtest app."""
     return TestApp(app)
 
 
 @pytest.fixture
-def db(app):
+def db(app: Flask) -> Generator[SQLAlchemy]:
     """Create database for the tests."""
-    _db.app = app
+    _db.app = app  # type:ignore[attr-defined]
     with app.app_context():
         _db.create_all()
 
@@ -46,8 +49,8 @@ def db(app):
 
 
 @pytest.fixture
-def user(db):
+def user(db: SQLAlchemy) -> UserFactory:
     """Create user for the tests."""
-    user = UserFactory(password="myprecious")
+    user = UserFactory(password="myprecious")  # noqa: S106
     db.session.commit()
     return user

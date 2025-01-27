@@ -4,6 +4,7 @@ skip_glob = ["migrations/*"]
 
 # ==== mypy ====
 [tool.mypy]
+module = "*.migrations.*"
 strict = true
 ignore_missing_imports = true
 allow_subclassing_any = true
@@ -17,8 +18,7 @@ warn_return_any = false
 namespace_packages = true
 
 [[tool.mypy.overrides]]
-# Django migrations should not produce any errors:
-module = "*.migrations.*"
+module = ["*.migrations.*", "*.envs.*", "*.env.*", "*.versions.*", "*.database.*", "*.commands.*"]
 ignore_errors = true
 
 
@@ -32,7 +32,7 @@ format_js = true
 ignore = "H006,H030,H031,T002"
 include = "H017,H035"
 indent = 2
-max_line_length = 120
+max_line_length = 89
 profile = "django"
 
 [tool.djlint.css]
@@ -150,4 +150,3 @@ line-ending = "auto"
 
 [tool.ruff.lint.isort]
 force-single-line = false
-

@@ -1,6 +1,3 @@
-# noqa: N999
-from RSSFeed.post import views
+from rss_feed.post import views
 
-__all__ = (
-    "views",
-)
+__all__ = ("views",)

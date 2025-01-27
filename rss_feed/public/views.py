@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
+
 from flask import (
     Blueprint,
     current_app,
@@ -10,6 +10,7 @@ from flask import (
     url_for,
 )
 from flask_login import login_required, login_user, logout_user
+from werkzeug import Response
 
 from rss_feed.extensions import login_manager
 from rss_feed.public.forms import LoginForm
@@ -21,13 +22,13 @@ blueprint = Blueprint("public", __name__, static_folder="../static")
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id: int) -> User | None:
     """Load user by ID."""
     return User.get_by_id(int(user_id))
 
 
 @blueprint.route("/", methods=["GET", "POST"])
-def home():
+def home() -> str | Response:
     """Home page."""
     form = LoginForm(request.form)
     current_app.logger.info("Hello from the home page!")
@@ -38,14 +39,13 @@ def home():
             flash("You are logged in.", "success")
             redirect_url = request.args.get("next") or url_for("user.members")
             return redirect(redirect_url)
-        else:
-            flash_errors(form)
+        flash_errors(form)
     return render_template("public/home.html", form=form)
 
 
 @blueprint.route("/logout/")
 @login_required
-def logout():
+def logout() -> Response:
     """Logout."""
     logout_user()
     flash("You are logged out.", "info")
@@ -53,7 +53,7 @@ def logout():
 
 
 @blueprint.route("/register/", methods=["GET", "POST"])
-def register():
+def register() -> Response | str:
     """Register new user."""
     form = RegisterForm(request.form)
     if form.validate_on_submit():
@@ -65,13 +65,12 @@ def register():
         )
         flash("Thank you for registering. You can now log in.", "success")
         return redirect(url_for("public.home"))
-    else:
-        flash_errors(form)
+    flash_errors(form)
     return render_template("public/register.html", form=form)
 
 
 @blueprint.route("/about/")
-def about():
+def about() -> str:
     """About page."""
     form = LoginForm(request.form)
     return render_template("public/about.html", form=form)

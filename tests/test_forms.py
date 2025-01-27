@@ -1,40 +1,48 @@
-# -*- coding: utf-8 -*-
 """Test forms."""
+
+from collections.abc import Generator
+
+from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.session import Session
 
 from rss_feed.public.forms import LoginForm
 from rss_feed.user.forms import RegisterForm
+from tests.factories import UserFactory
 
 
 class TestRegisterForm:
     """Register form."""
 
-    def test_validate_user_already_registered(self, user):
+    def test_validate_user_already_registered(self, user: UserFactory) -> None:
         """Enter username that is already registered."""
         form = RegisterForm(
             username=user.username,
             email="foo@bar.com",
-            password="example",
+            password="example",  # noqa: S106
             confirm="example",
         )
 
         assert form.validate() is False
         assert "Username already registered" in form.username.errors
 
-    def test_validate_email_already_registered(self, user):
+    def test_validate_email_already_registered(self, user: UserFactory) -> None:
         """Enter email that is already registered."""
         form = RegisterForm(
-            username="unique", email=user.email, password="example", confirm="example"
+            username="unique",
+            email=user.email,
+            password="example",  # noqa: S106
+            confirm="example",
         )
 
         assert form.validate() is False
         assert "Email already registered" in form.email.errors
 
-    def test_validate_success(self, db):
+    def test_validate_success(self, db: Generator[SQLAlchemy]) -> None:
         """Register with success."""
         form = RegisterForm(
             username="newusername",
             email="new@test.com",
-            password="example",
+            password="example",  # noqa: S106
             confirm="example",
         )
         assert form.validate() is True
@@ -43,32 +51,32 @@ class TestRegisterForm:
 class TestLoginForm:
     """Login form."""
 
-    def test_validate_success(self, user):
+    def test_validate_success(self, user: UserFactory) -> None:
         """Login successful."""
         user.save()
-        form = LoginForm(username=user.username, password="myprecious")
+        form = LoginForm(username=user.username, password="myprecious")  # noqa: S106
         assert form.validate() is True
         assert form.user == user
 
-    def test_validate_unknown_username(self, db):
+    def test_validate_unknown_username(self, db: Generator[SQLAlchemy]) -> None:
         """Unknown username."""
-        form = LoginForm(username="unknown", password="example")
+        form = LoginForm(username="unknown", password="example")  # noqa: S106
         assert form.validate() is False
         assert "Unknown username" in form.username.errors
         assert form.user is None
 
-    def test_validate_invalid_password(self, user):
+    def test_validate_invalid_password(self, user: UserFactory) -> None:
         """Invalid password."""
         user.save()
-        form = LoginForm(username=user.username, password="wrongpassword")
+        form = LoginForm(username=user.username, password="wrongpassword")  # noqa: S106
         assert form.validate() is False
         assert "Invalid password" in form.password.errors
 
-    def test_validate_inactive_user(self, user):
+    def test_validate_inactive_user(self, user: UserFactory) -> None:
         """Inactive user."""
         user.active = False
         user.save()
         # Correct username and password, but user is not activated
-        form = LoginForm(username=user.username, password="myprecious")
+        form = LoginForm(username=user.username, password="myprecious")  # noqa: S106
         assert form.validate() is False
         assert "User not activated" in form.username.errors
