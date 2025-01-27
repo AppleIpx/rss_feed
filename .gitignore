@@ -56,3 +56,4 @@ envs/.env
 
 # Development database
 *.db
+migrations
