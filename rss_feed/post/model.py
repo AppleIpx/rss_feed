@@ -1,6 +1,6 @@
-from sqlalchemy import Integer, String, DateTime, func, Text
+from sqlalchemy import DateTime, Integer, String, Text, func
 
-from RSSFeed.database import PkModel, Column
+from rss_feed.database import Column, PkModel
 
 
 class Post(PkModel):

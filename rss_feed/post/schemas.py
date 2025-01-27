@@ -1,18 +1,20 @@
 from marshmallow import Schema, fields
-from sqlalchemy import DateTime
+from marshmallow.fields import DateTime, Integer, String
 
 
 class BasePostSchema(Schema):
     """Basic layout for Posts."""
-    id: int = fields.Int()
-    name: str = fields.Str()
+
+    id: Integer = fields.Int()
+    name: String = fields.Str()
     created_at: DateTime = fields.DateTime()
     updated_at: DateTime = fields.DateTime()
-    short_description: str = fields.Str()
+    short_description: String = fields.Str()
 
 
 class CreatePostSchema(BasePostSchema):
     """Scheme for creating posts."""
+
     content = fields.Str()
 
 

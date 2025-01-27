@@ -1,11 +1,14 @@
-# -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+
 import logging
 import sys
+from collections.abc import Callable
+from typing import Any
 
 from flask import Flask, render_template
+from werkzeug.exceptions import HTTPException
 
-from rss_feed import commands, public, user, post
+from rss_feed import commands, post, public, user
 from rss_feed.extensions import (
     bcrypt,
     cache,
@@ -18,7 +21,7 @@ from rss_feed.extensions import (
 )
 
 
-def create_app(config_object="rss_feed.settings"):
+def create_app(config_object: str = "rss_feed.settings") -> Flask:
     """Create application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
     :param config_object: The configuration object to use.
@@ -34,7 +37,7 @@ def create_app(config_object="rss_feed.settings"):
     return app
 
 
-def register_extensions(app):
+def register_extensions(app: Flask) -> None:
     """Register Flask extensions."""
     bcrypt.init_app(app)
     cache.init_app(app)
@@ -44,21 +47,19 @@ def register_extensions(app):
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     flask_static_digest.init_app(app)
-    return None
 
 
-def register_blueprints(app):
+def register_blueprints(app: Flask) -> None:
     """Register Flask blueprints."""
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(post.views.blueprint)
-    return None
 
 
-def register_errorhandlers(app):
+def register_errorhandlers(app: Flask) -> None:
     """Register error handlers."""
 
-    def render_error(error):
+    def render_error(error: HTTPException) -> tuple[str, int]:
         """Render error template."""
         # If a HTTPException, pull the `code` attribute; default to 500
         error_code = getattr(error, "code", 500)
@@ -66,26 +67,24 @@ def register_errorhandlers(app):
 
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
-    return None
 
 
-def register_shellcontext(app):
+def register_shellcontext(app: Flask) -> None:
     """Register shell context objects."""
 
-    def shell_context():
+    def shell_context() -> dict[str, Any]:
         """Shell context objects."""
         return {"db": db, "User": user.models.User}
 
     app.shell_context_processor(shell_context)
 
 
-def register_commands(app):
+def register_commands(app: Flask) -> None:
     """Register Click commands."""
     app.cli.add_command(commands.test)
-    app.cli.add_command(commands.lint)
 
 
-def configure_logger(app):
+def configure_logger(app: Flask) -> None:
     """Configure loggers."""
     handler = logging.StreamHandler(sys.stdout)
     if not app.logger.handlers:

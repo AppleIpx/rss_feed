@@ -1,25 +1,23 @@
-# -*- coding: utf-8 -*-
 """Post views."""
-import json
 
-from flask import Blueprint, jsonify, request, flash, redirect, url_for, render_template
+from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
+from werkzeug import Response
 
-from RSSFeed.extensions import db
-from RSSFeed.post.form import CreatePostForm
-from RSSFeed.post.model import Post
-from RSSFeed.post.schemas import ListPostSchema, DetailPostSchema
-from RSSFeed.utils import flash_errors
+from rss_feed.extensions import db
+from rss_feed.post.form import CreatePostForm
+from rss_feed.post.model import Post
+from rss_feed.utils import flash_errors
 
 blueprint = Blueprint("post", __name__, url_prefix="/posts", static_folder="../static")
 
 
 @blueprint.route("/create", methods=["GET", "POST"])
-def create_post():
+def create_post() -> Response | str:
     """Create a new post."""
     form = CreatePostForm(request.form)
     if request.method == "POST":
         if form.validate_on_submit():
-            new_post = Post.create(
+            new_post: Post = Post.create(
                 name=form.name.data,
                 short_description=form.short_description.data,
                 content=form.content.data,
@@ -34,17 +32,19 @@ def create_post():
     return render_template("post/create_post.html", form=form)
 
 
-@blueprint.route('/<int:post_id>', methods=['GET'])
-def get_detail_post(post_id: int):
+@blueprint.route("/<int:post_id>", methods=["GET"])
+def get_detail_post(post_id: int) -> str | tuple[Response, int]:
     if post := Post.query.get(post_id):
         return render_template("post/get_detail_post.html", post=post)
-    return jsonify({
-        "error": "Post not found",
-        "message": f"No post with ID {post_id} exists in the database."
-    }), 404
+    return jsonify(
+        {
+            "error": "Post not found",
+            "message": f"No post with ID {post_id} exists in the database.",
+        },
+    ), 404
 
 
-@blueprint.route('/', methods=['GET'])
-def get_posts():
+@blueprint.route("/", methods=["GET"])
+def get_posts() -> str:
     posts = Post.query.all()
     return render_template("post/get_posts.html", posts=posts)

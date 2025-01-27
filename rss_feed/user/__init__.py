@@ -1,3 +1,5 @@
-# -*- coding: utf-8 -*-
 """The user module."""
-from . import views  # noqa
+
+from rss_feed.user import views
+
+__all__ = ("views",)

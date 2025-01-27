@@ -52,7 +52,7 @@ env/
 /rss_feed/static/build/
 
 # Configuration
-.env
+envs/.env
 
 # Development database
 *.db

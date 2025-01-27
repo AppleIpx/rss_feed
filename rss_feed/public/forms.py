@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """Public forms."""
+from typing import Any
+
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField
 from wtforms.validators import DataRequired
@@ -13,14 +14,14 @@ class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Create instance."""
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.user = None
 
-    def validate(self, **kwargs):
+    def validate(self, **kwargs: dict[str, Any]) -> bool | None:
         """Validate the form."""
-        initial_validation = super(LoginForm, self).validate()
+        initial_validation = super().validate()
         if not initial_validation:
             return False
 
