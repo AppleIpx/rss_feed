@@ -33,6 +33,7 @@ def create_app(config_object: str = "rss_feed.settings") -> Flask:
     register_shellcontext(app)
     register_commands(app)
     configure_logger(app)
+    # filling_db()
     return app
 
 
@@ -88,3 +89,7 @@ def configure_logger(app: Flask) -> None:
     handler = logging.StreamHandler(sys.stdout)
     if not app.logger.handlers:
         app.logger.addHandler(handler)
+
+# def filling_db() -> None:
+#     """Preservation of data in the database depends on the Link RSS."""
+#     prepare_data_for_db()

@@ -6,6 +6,7 @@ from werkzeug import Response
 from rss_feed.extensions import db
 from rss_feed.post.form import CreatePostForm
 from rss_feed.post.model import Post
+from rss_feed.post.utils.filling_db import prepare_data_for_db
 from rss_feed.utils import flash_errors
 
 blueprint = Blueprint("post", __name__, url_prefix="/posts", static_folder="../static")
@@ -20,7 +21,7 @@ def create_post() -> Response | str:
             new_post: Post = Post.create(
                 name=form.name.data,
                 short_description=form.short_description.data,
-                content=form.content.data,
+                link="",
             )
             db.session.add(new_post)
             db.session.commit()
@@ -46,5 +47,6 @@ def get_detail_post(post_id: int) -> str | tuple[Response, int]:
 
 @blueprint.route("/", methods=["GET"])
 def get_posts() -> str:
+    prepare_data_for_db()
     posts = Post.query.all()
     return render_template("post/get_posts.html", posts=posts)
