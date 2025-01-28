@@ -1,4 +1,5 @@
 """Public forms."""
+
 from typing import Any
 
 from flask_wtf import FlaskForm

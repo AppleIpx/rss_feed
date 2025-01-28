@@ -3,7 +3,6 @@
 from collections.abc import Generator
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy.session import Session
 
 from rss_feed.public.forms import LoginForm
 from rss_feed.user.forms import RegisterForm

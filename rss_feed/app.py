@@ -2,7 +2,6 @@
 
 import logging
 import sys
-from collections.abc import Callable
 from typing import Any
 
 from flask import Flask, render_template

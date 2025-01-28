@@ -1,7 +1,6 @@
 """Model unit tests."""
 
 import datetime as dt
-from typing import Generator
 
 import pytest
 from flask_sqlalchemy import SQLAlchemy
