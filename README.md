@@ -14,6 +14,11 @@ npm start  # run the webpack dev server and flask server using concurrently
 
 Go to `http://localhost:5000`. You will see a pretty welcome screen.
 
+If you use Windows, then you should read this article on installing node.js
+https://phoenixnap.com/kb/install-node-js-npm-on-windows
+
+If you use MacOs. Use your homebrew ```brew install node```
+
 #### Database Initialization (locally)
 
 Once you have installed your DBMS, run the following to create your app's
@@ -33,11 +38,3 @@ To run all tests, run
 ```bash
 flask test
 ```
-
-To run the linter, run
-
-```bash
-flask lint
-```
-
-The `lint` command will attempt to fix any linting/style errors in the code. If you only want to know if the code will pass CI and do not wish for the linter to make changes, add the `--check` argument.
