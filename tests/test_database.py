@@ -1,16 +1,17 @@
 """Database unit tests."""
 
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import pytest
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy.session import Session
 from sqlalchemy import text
 from sqlalchemy.orm.exc import ObjectDeletedError
 
 from rss_feed.database import Column, PkModel, db
-from rss_feed.user.models import User
+
+if TYPE_CHECKING:
+    from rss_feed.user.models import User
 
 
 class ExampleUserModel(UserMixin, PkModel):

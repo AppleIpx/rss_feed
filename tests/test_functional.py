@@ -27,9 +27,9 @@ class TestLoggingIn:
         assert res.status_code == status.HTTP_200_OK
 
     def test_sees_alert_on_log_out(
-            self,
-            user: UserFactory,
-            testapp: TestApp,
+        self,
+        user: UserFactory,
+        testapp: TestApp,
     ) -> None:
         """Show alert on logout."""
         res = testapp.get("/")

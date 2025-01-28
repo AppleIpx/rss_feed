@@ -1,5 +1,5 @@
 exclude: '^docs/|/migrations/|rss_feed/compat.py$'
-default_stages: [commit]
+default_stages: [pre-commit]
 
 default_language_version:
   python: python3.12

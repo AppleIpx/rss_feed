@@ -60,22 +60,22 @@ class PkModel(Model):
     def get_by_id(cls: type[T], record_id: str | bytes | float) -> T | None:
         """Get record by ID."""
         if any(
-                (
-                        isinstance(record_id, basestring) and record_id.isdigit(),
-                        isinstance(record_id, int | float),
-                ),
+            (
+                isinstance(record_id, basestring) and record_id.isdigit(),
+                isinstance(record_id, int | float),
+            ),
         ):
             return cls.query.session.get(cls, int(record_id))
         return None
 
 
 def reference_col(
-        tablename: str,
-        *,
-        nullable: bool = False,
-        pk_name: str = "id",
-        foreign_key_kwargs=None,
-        column_kwargs=None,
+    tablename: str,
+    *,
+    nullable: bool = False,
+    pk_name: str = "id",
+    foreign_key_kwargs=None,
+    column_kwargs=None,
 ) -> Column:  # type:ignore[valid-type]
     """Column that adds primary key foreign key reference.
 

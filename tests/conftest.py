@@ -6,7 +6,6 @@ from collections.abc import Generator
 import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy.session import Session
 from webtest import TestApp
 
 from rss_feed.app import create_app
