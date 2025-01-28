@@ -1,5 +1,5 @@
 {
-  "name": "RSSFeed",
+  "name": "rss_feed",
   "env": {
     "SECRET_KEY": {
       "description": "SECRET_KEY.",
