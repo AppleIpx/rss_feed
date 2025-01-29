@@ -21,3 +21,4 @@ DEBUG_TB_ENABLED = DEBUG
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 CACHE_TYPE = "flask_caching.backends.SimpleCache"  # Can be "MemcachedCache", "RedisCache", etc.
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+WTF_CSRF_ENABLED = False

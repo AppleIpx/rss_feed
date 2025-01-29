@@ -1,11 +1,11 @@
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 
 
 def validate_date(input_date: str) -> datetime:
-    if len(input_date) < 2:
-        return datetime.now()
-    return datetime.strptime(input_date, "%Y-%m-%dT%H:%M:%SZ")
+    if len(input_date) < 1:
+        return datetime.now(UTC)
+    return datetime.strptime(input_date, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
 
 
 def validate_text(text: str) -> str:

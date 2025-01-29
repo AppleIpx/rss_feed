@@ -7,7 +7,7 @@ from typing import Any
 from flask import Flask, render_template
 from werkzeug.exceptions import HTTPException
 
-from rss_feed import commands, post, public, user
+from rss_feed import commands, giga_chat, post, public, user
 from rss_feed.extensions import (
     bcrypt,
     cache,
@@ -33,7 +33,6 @@ def create_app(config_object: str = "rss_feed.settings") -> Flask:
     register_shellcontext(app)
     register_commands(app)
     configure_logger(app)
-    # filling_db()
     return app
 
 
@@ -54,6 +53,7 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(post.views.blueprint)
+    app.register_blueprint(giga_chat.view.blueprint)
 
 
 def register_errorhandlers(app: Flask) -> None:
@@ -89,7 +89,3 @@ def configure_logger(app: Flask) -> None:
     handler = logging.StreamHandler(sys.stdout)
     if not app.logger.handlers:
         app.logger.addHandler(handler)
-
-# def filling_db() -> None:
-#     """Preservation of data in the database depends on the Link RSS."""
-#     prepare_data_for_db()
