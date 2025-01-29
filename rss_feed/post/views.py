@@ -1,6 +1,7 @@
 """Post views."""
 
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
+from starlette import status
 from werkzeug import Response
 
 from rss_feed.extensions import db
@@ -42,7 +43,7 @@ def get_detail_post(post_id: int) -> str | tuple[Response, int]:
             "error": "Post not found",
             "message": f"No post with ID {post_id} exists in the database.",
         },
-    ), 404
+    ), status.HTTP_404_NOT_FOUND
 
 
 @blueprint.route("/", methods=["GET"])

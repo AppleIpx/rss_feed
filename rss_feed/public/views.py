@@ -32,7 +32,6 @@ def home() -> str | Response:
     """Home page."""
     form = LoginForm(request.form)
     current_app.logger.info("Hello from the home page!")
-    # Handle logging in
     if request.method == "POST":
         if form.validate_on_submit():
             login_user(form.user)

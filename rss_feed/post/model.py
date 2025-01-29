@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime, Integer, String, Text, func
+from sqlalchemy import DateTime, Integer, String, func
 
 from rss_feed.database import Column, PkModel
 
@@ -9,4 +9,4 @@ class Post(PkModel):
     created_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     short_description = Column(String(255), nullable=True)
-    link = Column(String(255), nullable=False, default='')
+    link = Column(String(255), nullable=False, default="")
