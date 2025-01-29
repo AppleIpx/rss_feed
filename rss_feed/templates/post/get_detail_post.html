@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             width: 80%;
             margin: 0 auto;
@@ -19,25 +20,31 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
+
         h1 {
             text-align: center;
             color: #333;
         }
+
         .post {
             margin-bottom: 20px;
         }
+
         .post h2 {
             font-size: 30px;
             color: #333;
         }
+
         .post .short-description {
             font-style: italic;
             color: #777;
         }
+
         .post .timestamps {
             font-size: 0.9em;
             color: #aaa;
         }
+
         .post .content {
             margin-top: 20px;
             color: #555;
@@ -45,22 +52,55 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Детальный просмотр поста</h1>
+<div class="container">
+    <h1>Детальный просмотр поста</h1>
 
-        <div class="post">
-            <h2>{{ post.name }}</h2>
-            <p class="short-description">{{ post.short_description }}</p>
-            <div class="timestamps">
-                <p><strong>Создан:</strong> {{ post.created_at }}</p>
-                <p><strong>Обновлен:</strong> {{ post.updated_at }}</p>
-            </div>
-            <div class="link">
-                <h3>Ссылка на статью </h3>
-                <h2> href={{ post.link }}</h2>
-            </div>
+    <div class="post">
+        <h2>{{ post.name }}</h2>
+        <p class="short-description">{{ post.short_description }}</p>
+        <div class="timestamps">
+            <p><strong>Создан:</strong> {{ post.created_at }}</p>
+            <p><strong>Обновлен:</strong> {{ post.updated_at }}</p>
         </div>
-
+        <div class="link">
+            <h3>Ссылка на статью: </h3>
+            <a href="{{ post.link }}" target="_blank" rel="noopener noreferrer">Перейти к статье</a>
+        </div>
+        <div class="text-input"
+             style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+            <h4 style="text-align: center;">Введите текст для преобразования статьи:</h4>
+            <textarea name="user_input" id="user_input" rows="10" cols="50" placeholder="Введите здесь текст..."
+                      style="resize: vertical; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; width: 80%; max-height: 300px; overflow-y: auto;">
+    </textarea>
+        </div>
+        <div class="button-container" style="display: flex; justify-content: center; margin-top: 20px;">
+            <button id="rephrase-button"
+                    style="
+                    background-color: #28a745;
+                    color: white;
+                    font-size: 18px;
+                    padding: 15px 30px;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    transition: background-color 0.3s ease, transform 0.2s ease;"
+                    onmouseover="this.style.backgroundColor='#218838'; this.style.transform='scale(1.05)';"
+                    onmouseout="this.style.backgroundColor='#28a745'; this.style.transform='scale(1)';"
+                    onmousedown="this.style.backgroundColor='#1e7e34'; this.style.transform='scale(0.98)';"
+                    onmouseup="this.style.backgroundColor='#218838'; this.style.transform='scale(1.05)';">
+                Перефразировать
+            </button>
+        </div>
+        <div class="rephrased-text"
+             style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
+            <h5 style="text-align: center;">Перефразированный текст:</h5>
+            <textarea id="rephrased-text" rows="15" cols="80" readonly
+                      style="resize: vertical; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; width: 80%; background-color: #f8f9fa; overflow-y: auto;">
+            </textarea>
+        </div>
     </div>
+
+</div>
 </body>
 </html>
