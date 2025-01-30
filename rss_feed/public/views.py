@@ -39,7 +39,7 @@ def home() -> str | Response:
             redirect_url = request.args.get("next") or url_for("user.members")
             return redirect(redirect_url)
         flash_errors(form)
-    return render_template("public/home.html", form=form)
+    return redirect(url_for("post.get_posts"))
 
 
 @blueprint.route("/logout/")

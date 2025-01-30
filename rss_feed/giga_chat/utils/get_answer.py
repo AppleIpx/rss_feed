@@ -9,6 +9,12 @@ env = Env()
 env.read_env()
 
 
+def generate_prompt_with_user_text(user_text: str) -> str:
+    """Compound user text and prompt."""
+    prompt_text = "Перескажи данный текст в стиле опытного журналиста"
+    return prompt_text + "\n" + user_text
+
+
 def generate_payload(user_message: str) -> str:
     """Function that generates Payload."""
     return json.dumps(
@@ -17,7 +23,7 @@ def generate_payload(user_message: str) -> str:
             "messages": [
                 {
                     "role": "user",
-                    "content": user_message,
+                    "content": generate_prompt_with_user_text(user_text=user_message),
                 },
             ],
             "temperature": 1,
